@@ -18,9 +18,17 @@ public class GameField {
     private final char EMPTY_CELL = '.';
 
     /**
-     * Конструктор
+     * Размер игрового поля
      */
-    public GameField() {
+    private final int FIELD_SIZE;
+
+    /**
+     * Конструктор
+     *
+     * @param fieldSize размер игрового поля
+     */
+    public GameField(int fieldSize) {
+        this.FIELD_SIZE = fieldSize;
         initialize();
     }
 
@@ -28,7 +36,7 @@ public class GameField {
      * Первоначальное заполнение игрового поля
      */
     public void initialize() {
-        field = new char[3][3];
+        field = new char[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[0].length; j++) {
                 field[i][j] = EMPTY_CELL;
@@ -123,8 +131,15 @@ public class GameField {
      * @return          true, если выигрышная комбинация присутствует в каком-либо ряду
      */
     boolean checkRows(char symbol) {
-        for (int i = 0; i < 3; i++) {
-            if (field[i][0] == symbol && field[i][1] == symbol && field[i][2] == symbol) {
+        int symbolCounter;
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            symbolCounter = 0;
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                if (field[i][j] == symbol) {
+                    symbolCounter++;
+                }
+            }
+            if (symbolCounter == FIELD_SIZE) {
                 return true;
             }
         }
@@ -138,8 +153,15 @@ public class GameField {
      * @return          true, если выигрышная комбинация присутствует в каком-либо столбце
      */
     boolean checkColumns(char symbol) {
-        for (int i = 0; i < 3; i++) {
-            if (field[0][i] == symbol && field[1][i] == symbol && field[2][i] == symbol) {
+        int symbolCounter;
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            symbolCounter = 0;
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                if (field[j][i] == symbol) {
+                    symbolCounter++;
+                }
+            }
+            if (symbolCounter == FIELD_SIZE) {
                 return true;
             }
         }
@@ -153,8 +175,21 @@ public class GameField {
      * @return          true, если выигрышная комбинация присутствует в какой-либо диагонали
      */
     boolean checkDiagonals(char symbol) {
-        return (field[0][0] == symbol && field[1][1] == symbol && field[2][2] == symbol)
-                ||
-                (field[0][2] == symbol && field[1][1] == symbol && field[2][0] == symbol);
+        int symbolCounter = 0;
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            if (field[i][i] == symbol) {
+                symbolCounter++;
+            }
+        }
+        if (symbolCounter == FIELD_SIZE) {
+            return true;
+        }
+        symbolCounter = 0;
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            if (field[i][FIELD_SIZE - i - 1] == symbol) {
+                symbolCounter++;
+            }
+        }
+        return symbolCounter == FIELD_SIZE;
     }
 }
